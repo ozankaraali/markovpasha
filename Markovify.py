@@ -2,38 +2,33 @@ import markovify
 import nltk
 import re
 import EksiEntriesRequest
+import os
 
-nltk.download('averaged_perceptron_tagger')
+baslik = "ttnet"
 
-#EksiEntriesRequest.fetch_entries('hepsiburada.com')
+EksiEntriesRequest.fetch_entries(baslik)
 
-
-class POSifiedText(markovify.Text):
+class NaturalLanguageText(markovify.Text):
     def word_split(self, sentence):
         words = re.split(self.word_split_pattern, sentence)
-        words = [ "::".join(tag) for tag in nltk.pos_tag(words) ]
+        words = ["::".join(tag) for tag in nltk.pos_tag(words)]
         return words
 
     def word_join(self, words):
         sentence = " ".join(word.split("::")[0] for word in words)
         return sentence
 
-with open("hepsiburadacom.txt") as f:
-    textinput = f.read()
-
-with open("ttnet.txt") as f:
-    textttnet = f.read()
-
-with open("playstation.txt") as f:
-    textplaystation = f.read()
-
-# Build the model.
-text_modeli = POSifiedText(textinput, state_size=3)
-text_modelp = POSifiedText(textttnet, state_size=3)
-text_modelt = POSifiedText(textplaystation, state_size=3)
-
-model_combo = markovify.combine([ text_modeli, text_modelp, text_modelt ], [ 1, 1, 1 ])
+combined_model = None
+for (dirpath, _, filenames) in os.walk("./data/"):
+    for filename in filenames:
+        if filename != ".DS_Store":
+            with open(os.path.join(dirpath, filename)) as f:
+                model = NaturalLanguageText(f, state_size=3, retain_original=False)
+                if combined_model:
+                    combined_model = markovify.combine(models=[combined_model, model])
+                else:
+                    combined_model = model
 
 # Print five randomly-generated sentences
 for i in range(5):
-    print(model_combo.make_short_sentence(500,300,tries=1000))
+    print(combined_model.make_short_sentence(500,300,tries=1000))
