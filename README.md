@@ -2,6 +2,7 @@
 Markov Chain Text Generation Using existing Eksi Entries.
 
 ## Usage:
+Run it with Markovify.py
 ```
 import EksiEntriesRequest
 import markovify
@@ -23,3 +24,4 @@ pycurl,
 BeautifulSoup4,
 requests,
 markovify
+nltk
