@@ -38,4 +38,4 @@ def get_response(path):
     return BeautifulSoup(html_response, "lxml")
 
 
-fetch_entries('ttnet')
+#fetch_entries('ttnet')
