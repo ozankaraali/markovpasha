@@ -23,5 +23,5 @@ for i in range(5):
 pycurl,
 BeautifulSoup4,
 requests,
-markovify
+markovify,
 nltk

@@ -4,9 +4,9 @@ import re
 import EksiEntriesRequest
 import os
 
-baslik = "ttnet"
+header = "ttnet"
+EksiEntriesRequest.fetch_entries(header)
 
-EksiEntriesRequest.fetch_entries(baslik)
 
 class NaturalLanguageText(markovify.Text):
     def word_split(self, sentence):
@@ -18,17 +18,17 @@ class NaturalLanguageText(markovify.Text):
         sentence = " ".join(word.split("::")[0] for word in words)
         return sentence
 
+
 combined_model = None
-for (dirpath, _, filenames) in os.walk("./data/"):
-    for filename in filenames:
+for (dir_path, _, file_names) in os.walk("./data/"):
+    for filename in file_names:
         if filename != ".DS_Store":
-            with open(os.path.join(dirpath, filename)) as f:
-                model = NaturalLanguageText(f, state_size=3, retain_original=False)
+            with open(os.path.join(dir_path, filename)) as f:
+                model = NaturalLanguageText(f, state_size=2, retain_original=False)
                 if combined_model:
                     combined_model = markovify.combine(models=[combined_model, model])
                 else:
                     combined_model = model
 
-# Print five randomly-generated sentences
 for i in range(5):
-    print(combined_model.make_short_sentence(500,300,tries=1000))
+    print(combined_model.make_short_sentence(300, 150, tries=1000))

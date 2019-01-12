@@ -3,7 +3,6 @@ import pycurl
 from io import BytesIO
 from bs4 import BeautifulSoup
 import requests
-
 import markovify
 import nltk
 import re
@@ -55,6 +54,3 @@ def get_response(path):
     html_response = response_bytes.getvalue().decode('UTF-8')
 
     return BeautifulSoup(html_response, "lxml")
-
-
-# fetch_entries('')
